@@ -1,5 +1,6 @@
 import React, { ComponentProps, RefObject } from "react";
 import ProjectCard from "../sub/ProjectCard";
+import calculateOpacityByProgress from "@/utils/calculateOpacityByProgress";
 
 interface Props {
   containerRef: RefObject<HTMLDivElement>;
@@ -26,9 +27,6 @@ const projects: ComponentProps<typeof ProjectCard>[] = [
   },
 ];
 const Projects = ({ containerRef, stepProgress }: Props) => {
-  const projectPerPercentAmount = 100 / projects.length;
-  const projectsVisible = Math.ceil(stepProgress / projectPerPercentAmount);
-
   return (
     <div ref={containerRef} className="min-h-[400vh]" id="projects">
       <div className="sticky top-0 flex flex-col items-center justify-center py-20">
@@ -36,9 +34,14 @@ const Projects = ({ containerRef, stepProgress }: Props) => {
           My Projects
         </h1>
         <div className="h-full w-full flex flex-col md:flex-row gap-10 px-10">
-          {projects.map((props, idx) => (
-            <ProjectCard {...props} key={idx} />
-          ))}
+          {projects.map((props, idx) => {
+            const opacity = calculateOpacityByProgress({
+              countOfElements: projects.length,
+              progress: stepProgress,
+              currentElementIdx: idx,
+            });
+            return <ProjectCard {...props} opacity={opacity} key={idx} />;
+          })}
         </div>
       </div>
     </div>

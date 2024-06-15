@@ -27,9 +27,16 @@ export default function useContentProgress({
           activeRect = rect;
         }
       });
-      // activeRect.top + y == element y coordinate relative to document
-      const elementY = y + activeRect.top - window.innerHeight;
-      const progress = (y - elementY) / (activeRect.height / 100);
+      // y coordinate relative to document
+      let containerTop = y + activeRect.top;
+
+      // Using to make last section handle progress properly
+      // TODO: add some content after last section
+      if (step === contentSectionCount) {
+        containerTop -= window.innerHeight;
+      }
+
+      const progress = (y - containerTop) / (activeRect.height / 100);
 
       setStepProgress(Math.min(progress, 100));
       setStep(activeIdx + 1);

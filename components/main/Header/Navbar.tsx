@@ -2,9 +2,8 @@ import { Socials } from "@/constants";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { useScroll, motion } from "framer-motion";
-import { useEffect } from "react";
-import { useNavbarStatus } from "@/utils/store/useNavbarStatus";
+import { motion } from "framer-motion";
+import useNavbar from "@/utils/hooks/useNavbar";
 
 interface NavbarProps {
   openMenuHandler: () => void;
@@ -12,32 +11,13 @@ interface NavbarProps {
 
 export const navbarLinks = ["/#about-me", "/#skills", "/#projects"];
 const linkNames = ["About Me", "Skills", "Projects"];
+
 const Navbar = ({ openMenuHandler }: NavbarProps) => {
-  const { scrollY } = useScroll();
-  const { isOpen, changeStatus } = useNavbarStatus();
-
-  useEffect(() => {
-    function scrollHandler(y: number) {
-      const prevY = scrollY.getPrevious();
-      if (!prevY) return;
-      if (prevY < y && isOpen) {
-        changeStatus(false);
-      } else if (prevY > y && !isOpen) {
-        changeStatus(true);
-      }
-    }
-    scrollY.on("change", scrollHandler);
-    return () => {
-      scrollY.clearListeners();
-    };
-  }, [scrollY, isOpen]);
-
+  const { navbarVariants: variants, isOpen } = useNavbar();
   return (
     <motion.div
-      animate={{
-        translateY: isOpen ? ["-100%", "0%"] : ["0%", "-100%"],
-        opacity: isOpen ? 1 : 0,
-      }}
+      variants={variants}
+      animate={isOpen ? "open" : "closed"}
       className="w-full h-[65px] fixed top-0 shadow-lg shadow-[#2A0E61]/50 bg-[#03001417] backdrop-blur-md z-50 px-10 max-w-[1855px] items-center rounded-t-full md:rounded-full"
       transition={{ duration: 0.25, ease: "easeInOut" }}
     >

@@ -1,14 +1,50 @@
 "use client";
 
-import { Backend_skill, Skill_data } from "@/constants";
+import { Backend_skill, SkillItem, Skill_data } from "@/constants";
 import SkillDataProvider from "../sub/SkillDataProvider";
 import SkillText from "../sub/SkillText";
 import { motion } from "framer-motion";
 import { RefObject } from "react";
-interface Props {
+import calculateOpacityByProgress from "@/utils/calculateOpacityByProgress";
+interface SkillsProps {
   containerRef: RefObject<HTMLDivElement>;
+  stepProgress: number;
 }
-const Skills = ({ containerRef }: Props) => {
+interface SkillsListProps {
+  skillsGroup: SkillItem[][];
+  progress: number;
+}
+function SkillsList({ skillsGroup, progress }: SkillsListProps) {
+  return skillsGroup.map((skills, idx) => {
+    const skillsElements = skills.map((image, skillIdx) => {
+      const scale = calculateOpacityByProgress({
+        countOfElements: skills.length,
+        currentElementIdx: skillIdx,
+        progress,
+      });
+      return (
+        <SkillDataProvider
+          key={image.src}
+          src={image.src}
+          width={image.width}
+          height={image.height}
+          scale={scale}
+          index={skillIdx}
+        />
+      );
+    });
+    return (
+      <div
+        key={idx}
+        className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center"
+      >
+        {idx % 2 ? skillsElements : skillsElements.reverse()}
+      </div>
+    );
+  });
+}
+const Skills = ({ containerRef, stepProgress }: SkillsProps) => {
+  const skillsGroup = [Skill_data, Backend_skill];
   return (
     <div ref={containerRef} className="min-h-[400vh]" id="skills">
       <div className="sticky top-0 left-0">
@@ -18,28 +54,7 @@ const Skills = ({ containerRef }: Props) => {
           style={{ transform: "scale(0.9)" }}
         >
           <SkillText />
-          <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
-            {Skill_data.map((image, index) => (
-              <SkillDataProvider
-                key={index}
-                src={image.Image}
-                width={image.width}
-                height={image.height}
-                index={index}
-              />
-            ))}
-          </div>
-          <div className="flex flex-row justify-around flex-wrap mt-4 gap-5 items-center">
-            {Backend_skill.map((image, index) => (
-              <SkillDataProvider
-                key={index}
-                src={image.Image}
-                width={image.width}
-                height={image.height}
-                index={index}
-              />
-            ))}
-          </div>
+          <SkillsList skillsGroup={skillsGroup} progress={stepProgress} />
           <div className="w-full h-full absolute">
             <div className="w-full h-full z-[-10] opacity-30 absolute flex items-center justify-center bg-cover">
               <video

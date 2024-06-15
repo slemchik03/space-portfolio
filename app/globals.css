@@ -75,6 +75,13 @@
   @apply absolute top-[50%] -left-[38px] translate-y-[-50%] 
         h-2 bg-[#7042f88b] rounded-full w-full z-0
 }
+.animated-gradient {
+  @apply text-transparent bg-clip-text bg-300% 
+}
+.hero-content-gradient-bg {
+@apply bg-gradient-to-r from-purple-500  via-blue-500 to-cyan-500 
+        animated-gradient animate-[animated-gradient_2s_ease-in-out_infinite_alternate]
+}
 html {
   scroll-behavior: smooth;
 }

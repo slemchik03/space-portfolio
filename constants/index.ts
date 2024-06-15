@@ -1,67 +1,73 @@
-export const Skill_data = [
+export interface SkillItem {
+  skill_name: string;
+  src: string;
+  width: number;
+  height: number;
+}
+export const Skill_data: SkillItem[] = [
   {
     skill_name: "Html 5",
-    Image: "/html.png",
+    src: "/html.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Css",
-    Image: "/css.png",
+    src: "/css.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Java Script",
-    Image: "/js.png",
+    src: "/js.png",
     width: 65,
     height: 65,
   },
   {
     skill_name: "Tailwind Css",
-    Image: "/tailwind.png",
+    src: "/tailwind.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "React",
-    Image: "/react.png",
+    src: "/react.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Redux",
-    Image: "/redux.png",
+    src: "/redux.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "React Query",
-    Image: "/reactquery.png",
+    src: "/reactquery.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Type Script",
-    Image: "/ts.png",
+    src: "/ts.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Next js 13",
-    Image: "/next.png",
+    src: "/next.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Framer Motion",
-    Image: "/framer.png",
+    src: "/framer.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Stripe Payment",
-    Image: "/stripe.webp",
+    src: "/stripe.webp",
     width: 80,
     height: 80,
   },
@@ -82,28 +88,28 @@ export const Socials = [
   },
 ];
 
-export const Backend_skill = [
+export const Backend_skill: SkillItem[] = [
   {
     skill_name: "Node js",
-    Image: "/node-js.png",
+    src: "/node-js.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Express js",
-    Image: "/express.png",
+    src: "/express.png",
     width: 80,
     height: 80,
   },
   {
     skill_name: "Fire base",
-    Image: "/Firebase.png",
+    src: "/Firebase.png",
     width: 55,
     height: 55,
   },
   {
     skill_name: "Prisma",
-    Image: "/prisma.webp",
+    src: "/prisma.webp",
     width: 70,
     height: 70,
   },

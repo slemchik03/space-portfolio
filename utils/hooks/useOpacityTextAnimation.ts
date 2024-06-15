@@ -3,14 +3,12 @@ import { RefObject, useEffect, useMemo, useState } from "react";
 
 export interface UseOpacityTextAnimationProps {
   containerRef: RefObject<HTMLElement>;
-  targetRef: RefObject<HTMLElement>;
   charCount: number;
   initialOpacityValue: number;
 }
 
 export default function useOpacityTextAnimation({
   containerRef,
-  targetRef,
   charCount,
   initialOpacityValue,
 }: UseOpacityTextAnimationProps): number[] {
@@ -26,15 +24,14 @@ export default function useOpacityTextAnimation({
   useEffect(() => {
     function scrollHandler(absoluteY: number) {
       const containerRect = containerRef.current?.getBoundingClientRect();
-      const targetRect = targetRef.current?.getBoundingClientRect();
 
-      if (!containerRect || !targetRect) return;
+      if (!containerRect) return;
 
-      const trackHeight = containerRect.height + targetRect.height;
+      const trackHeight = containerRect.height;
       const heightPerChar = Math.floor(trackHeight / charCount);
       // Normalized scroll y
       const y = Math.min(
-        Math.max(absoluteY - containerRect.top - targetRect.height, 0),
+        Math.max(absoluteY - containerRect.top, 0),
         trackHeight
       );
       const visibleCharsCount = Math.floor(absoluteY / heightPerChar);
@@ -57,7 +54,7 @@ export default function useOpacityTextAnimation({
     return () => {
       scrollY.clearListeners();
     };
-  }, [charCount, containerRef, initialOpacityValue, scrollY, targetRef]);
+  }, [charCount, containerRef, initialOpacityValue, scrollY]);
 
   return charOpacityValues;
 }
