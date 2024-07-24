@@ -5,22 +5,30 @@ import { slideInFromLeft, slideInFromTop } from "@/utils/motion";
 import { SparklesIcon } from "@heroicons/react/24/solid";
 import TextWithOpacityAnimation from "./TextWithOpacityAnimation";
 import { MyDescription } from "@/constants";
-import useHeroContentData from "@/utils/hooks/useHereContentData";
 import clsx from "@/utils/clsx";
+import { RefObject } from "react";
+import useNavbar from "@/utils/hooks/useNavbar";
+import AnimatedText from "../ui/text/AnimatedText";
 
-const HeroContent = () => {
-  const { containerRef, isActive } = useHeroContentData();
+interface Props {
+  contentSectionElements: RefObject<HTMLDivElement[]>;
+}
 
+const HeroContent = ({ contentSectionElements }: Props) => {
+  const { isOpen: isNavbarOpen } = useNavbar();
   return (
     <div
-      ref={containerRef}
       className={clsx(
         "min-h-[400vh] relative flex flex-col items-center h-full w-full"
       )}
       id="about-me"
+      ref={(el) =>
+        (contentSectionElements.current![0] =
+          contentSectionElements.current![0] || el)
+      }
     >
       <motion.div
-        animate={{ top: isActive ? "100px" : "0px" }}
+        animate={{ top: !isNavbarOpen ? "50px" : "0px" }}
         transition={{ ease: "linear", duration: 0.1 }}
         className="sticky top-0 left-0 min-h-[600px] px-5 md:px-10 xl:px-20 mt-40 z-20 transition-all"
       >
@@ -29,7 +37,7 @@ const HeroContent = () => {
           animate="visible"
           className="flex flex-row items-center justify-center w-full"
         >
-          <div className="h-full flex flex-col gap-5 justify-center items-center text-center">
+          <div className="h-full flex flex-col mt-5 md:mt-0 gap-5 justify-center items-center text-center">
             <motion.div
               variants={slideInFromTop}
               className="Welcome-box py-[8px] px-[7px] border border-[#7042f88b] opacity-[0.9]"
@@ -41,16 +49,23 @@ const HeroContent = () => {
             </motion.div>
 
             <motion.div
-              variants={slideInFromLeft(0.5)}
+              // variants={slideInFromLeft(0.5)}
               className="flex flex-col gap-6 mt-6 md:text-6xl text-4xl xl:text-7xl font-bold text-white max-w-[650px] h-auto"
             >
               <span>
-                Providing
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500">
-                  {" "}
-                  the best{" "}
+                <AnimatedText
+                  type="opacity"
+                  value="Providing"
+                  calcDelay={(idx) => ((idx + 1) / 2) * 0.1}
+                />{" "}
+                <span className="hero-content-gradient-bg inline-block">
+                  the best
                 </span>
-                project exprience
+                <AnimatedText
+                  type="opacity"
+                  value="project exprience"
+                  calcDelay={(idx) => ((idx + 1) / 2) * 0.1}
+                />
               </span>
             </motion.div>
 
@@ -62,8 +77,8 @@ const HeroContent = () => {
                   "text-center text-gray-400 my-5 max-w-[600px] inline-flex justify-center flex-wrap gap-1",
               }}
               wordClassName="inline-flex text-xl md:text-2xl"
-              containerRef={containerRef}
-              initialOpacityValue={0.2}
+              containerEl={contentSectionElements.current?.[0] || null}
+              initialOpacityValue={0}
             />
             <motion.a
               variants={slideInFromLeft(1)}
@@ -72,18 +87,6 @@ const HeroContent = () => {
               Learn More!
             </motion.a>
           </div>
-
-          {/* <motion.div
-        variants={slideInFromRight(0.8)}
-        className="w-full h-full flex justify-center items-center"
-      >
-        <Image
-          src="/mainIconsdark.svg"
-          alt="work icons"
-          height={650}
-          width={650}
-        />
-      </motion.div> */}
         </motion.div>
       </motion.div>
     </div>

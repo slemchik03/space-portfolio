@@ -4,10 +4,9 @@ import useOpacityTextAnimation, {
   UseOpacityTextAnimationProps,
 } from "@/utils/hooks/useOpacityTextAnimation";
 import { motion } from "framer-motion";
-import { ComponentProps, Fragment, useMemo, useRef } from "react";
+import { ComponentProps, useMemo } from "react";
 
-interface Props
-  extends Omit<UseOpacityTextAnimationProps, "charCount" | "targetRef"> {
+interface Props extends Omit<UseOpacityTextAnimationProps, "charCount"> {
   containerProps?: ComponentProps<typeof motion.div>;
   wordClassName?: string;
   text: string;
@@ -19,29 +18,32 @@ export default function TextWithOpacityAnimation({
   wordClassName,
   ...props
 }: Props) {
-  const targetRef = useRef<HTMLDivElement | null>(null);
   const opacityList = useOpacityTextAnimation({
     ...props,
-    targetRef,
     charCount: text.length,
   });
   const words = useMemo(() => text.split(" "), [text]);
   let letterIdx = 0;
+
   return (
-    <motion.div ref={targetRef} {...containerProps}>
+    <motion.div {...containerProps}>
       {words.map((word, idx) => {
-        if (!word) return <Fragment key={idx}></Fragment>;
+        if (!word) return;
+        const letters = word.split("");
         return (
           <div className={wordClassName} key={idx}>
-            {word.split("").map((letter) => {
+            {letters.map((letter) => {
               return (
                 <motion.div
                   key={letterIdx}
                   initial={{
                     opacity: props.initialOpacityValue,
                   }}
-                  animate={{ opacity: opacityList[letterIdx++] }}
-                  transition={{ease: "linear"}}
+                  animate={{
+                    opacity: opacityList[letterIdx],
+                    scale: Math.max(opacityList[letterIdx++], 0.4),
+                  }}
+                  transition={{ ease: "easeInOut" }}
                 >
                   {letter}
                 </motion.div>
