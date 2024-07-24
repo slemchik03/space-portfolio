@@ -7,7 +7,7 @@ import ProgressTrack from "@/components/sub/progress-track";
 import useContentProgress from "@/utils/hooks/useContentProgress";
 
 export default function Home() {
-  const { contentSectionRefs, step, stepProgress } = useContentProgress({
+  const { contentSectionElements, step, stepProgress } = useContentProgress({
     contentSectionCount: 3,
   });
   const skillsProgress = step === 2 ? stepProgress : 0;
@@ -21,14 +21,14 @@ export default function Home() {
         stepCount={3}
       />
       <div className="flex flex-col gap-20">
-        <HeroContent containerRef={contentSectionRefs.at(0)!} />
+        <HeroContent contentSectionElements={contentSectionElements} />
         <Skills
           stepProgress={skillsProgress}
-          containerRef={contentSectionRefs.at(1)!}
+          contentSectionElements={contentSectionElements}
         />
         <Projects
           stepProgress={projectsProgress}
-          containerRef={contentSectionRefs.at(2)!}
+          contentSectionElements={contentSectionElements}
         />
       </div>
     </main>

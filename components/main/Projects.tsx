@@ -3,7 +3,7 @@ import ProjectCard from "../sub/ProjectCard";
 import calculateOpacityByProgress from "@/utils/calculateOpacityByProgress";
 
 interface Props {
-  containerRef: RefObject<HTMLDivElement>;
+  contentSectionElements: RefObject<HTMLDivElement[]>;
   stepProgress: number;
 }
 const projects: ComponentProps<typeof ProjectCard>[] = [
@@ -26,9 +26,16 @@ const projects: ComponentProps<typeof ProjectCard>[] = [
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
 ];
-const Projects = ({ containerRef, stepProgress }: Props) => {
+const Projects = ({ contentSectionElements, stepProgress }: Props) => {
   return (
-    <div ref={containerRef} className="min-h-[400vh]" id="projects">
+    <div
+      ref={(el) =>
+        (contentSectionElements.current![2] =
+          contentSectionElements.current![2] || el)
+      }
+      className="min-h-[400vh]"
+      id="projects"
+    >
       <div className="sticky top-0 flex flex-col items-center justify-center py-20">
         <h1 className="text-[40px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-cyan-500 py-20">
           My Projects

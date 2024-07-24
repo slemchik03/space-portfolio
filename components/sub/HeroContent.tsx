@@ -11,10 +11,10 @@ import useNavbar from "@/utils/hooks/useNavbar";
 import AnimatedText from "../ui/text/AnimatedText";
 
 interface Props {
-  containerRef: RefObject<HTMLDivElement>;
+  contentSectionElements: RefObject<HTMLDivElement[]>;
 }
 
-const HeroContent = ({ containerRef }: Props) => {
+const HeroContent = ({ contentSectionElements }: Props) => {
   const { isOpen: isNavbarOpen } = useNavbar();
   return (
     <div
@@ -22,7 +22,10 @@ const HeroContent = ({ containerRef }: Props) => {
         "min-h-[400vh] relative flex flex-col items-center h-full w-full"
       )}
       id="about-me"
-      ref={containerRef}
+      ref={(el) =>
+        (contentSectionElements.current![0] =
+          contentSectionElements.current![0] || el)
+      }
     >
       <motion.div
         animate={{ top: !isNavbarOpen ? "50px" : "0px" }}
@@ -74,7 +77,7 @@ const HeroContent = ({ containerRef }: Props) => {
                   "text-center text-gray-400 my-5 max-w-[600px] inline-flex justify-center flex-wrap gap-1",
               }}
               wordClassName="inline-flex text-xl md:text-2xl"
-              containerRef={containerRef}
+              containerEl={contentSectionElements.current?.[0] || null}
               initialOpacityValue={0}
             />
             <motion.a
@@ -84,18 +87,6 @@ const HeroContent = ({ containerRef }: Props) => {
               Learn More!
             </motion.a>
           </div>
-
-          {/* <motion.div
-        variants={slideInFromRight(0.8)}
-        className="w-full h-full flex justify-center items-center"
-      >
-        <Image
-          src="/mainIconsdark.svg"
-          alt="work icons"
-          height={650}
-          width={650}
-        />
-      </motion.div> */}
         </motion.div>
       </motion.div>
     </div>

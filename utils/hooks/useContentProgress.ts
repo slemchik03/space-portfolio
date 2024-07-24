@@ -1,26 +1,24 @@
 import { useScroll } from "framer-motion";
-import { RefObject, createRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function useContentProgress({
   contentSectionCount,
 }: {
   contentSectionCount: number;
 }) {
-  const initialRefs = Array(contentSectionCount).fill(createRef());
-  const [contentSectionRefs, setContentSectionRefs] =
-    useState<RefObject<HTMLDivElement>[]>(initialRefs);
+  const contentSectionElements = useRef<HTMLDivElement[]>([]);
   const [step, setStep] = useState(1);
   const [stepProgress, setStepProgress] = useState(0);
   const { scrollY } = useScroll();
 
   useEffect(() => {
     function scrollHandler(y: number) {
-      const refs = contentSectionRefs;
+      const elements = contentSectionElements;
       let activeIdx = 0;
       let activeRect: DOMRect = new DOMRect();
 
-      refs.forEach((ref, idx) => {
-        const rect = ref.current?.getBoundingClientRect();
+      elements.current.forEach((el, idx) => {
+        const rect = el.getBoundingClientRect();
         if (!rect) return;
         if (rect.top <= 0) {
           activeIdx = idx;
@@ -44,21 +42,10 @@ export default function useContentProgress({
     scrollY.on("change", scrollHandler);
 
     return () => scrollY.clearListeners();
-  }, [contentSectionRefs, scrollY, step]);
-
-  useEffect(() => {
-    // Creating new refs
-    setContentSectionRefs(
-      Array(contentSectionCount)
-        .fill(0)
-        .map(() => {
-          return createRef<HTMLDivElement>();
-        })
-    );
-  }, [contentSectionCount]);
+  }, [contentSectionElements, scrollY, step]);
 
   return {
-    contentSectionRefs,
+    contentSectionElements,
     stepProgress,
     step,
   };

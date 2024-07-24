@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { RefObject } from "react";
 import calculateOpacityByProgress from "@/utils/calculateOpacityByProgress";
 interface SkillsProps {
-  containerRef: RefObject<HTMLDivElement>;
+  contentSectionElements: RefObject<HTMLDivElement[]>;
   stepProgress: number;
 }
 interface SkillsListProps {
@@ -43,10 +43,17 @@ function SkillsList({ skillsGroup, progress }: SkillsListProps) {
     );
   });
 }
-const Skills = ({ containerRef, stepProgress }: SkillsProps) => {
+const Skills = ({ contentSectionElements, stepProgress }: SkillsProps) => {
   const skillsGroup = [Skill_data, Backend_skill];
   return (
-    <div ref={containerRef} className="min-h-[400vh]" id="skills">
+    <div
+      ref={(el) =>
+        (contentSectionElements.current![1] =
+          contentSectionElements.current![1] || el)
+      }
+      className="min-h-[400vh]"
+      id="skills"
+    >
       <div className="sticky top-0 left-0">
         <motion.section
           id="skills"
